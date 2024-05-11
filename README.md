@@ -27,3 +27,14 @@ Add the Pinecone API key to the .env file:
 ```
 PINECONE_API_KEY=<your-api-key>
 ```
+
+## Running the chatbot
+
+```bash
+python run.py
+```
+
+In separate terminal run ngrok:
+```bash
+ngrok http 8000 --domain <your--ngrok-domain>.ngrok-free.app
+```
