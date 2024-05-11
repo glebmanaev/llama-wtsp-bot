@@ -1,0 +1,12 @@
+langchain
+langchain-core
+langchain-community
+pinecone-client
+#openai
+#tiktoken
+pandas
+tqdm
+sentence-transformers
+
+flask
+python-dotenv
