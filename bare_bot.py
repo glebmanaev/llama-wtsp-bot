@@ -97,6 +97,7 @@ vectorstore = LC_Pinecone(
     text_key="chunk"
 )
 
+
 def add_medical_context(query, k=3):
     """Finds the top k most relevant medical context for a given query and appends it to the query."""
     query_vector = model.encode([query])[0].tolist()
@@ -106,17 +107,34 @@ def add_medical_context(query, k=3):
     return query_w_context
 
 
-def generate_response(message_body, wa_id, name):
-    #If user is old, load its memory, otherwise create a new one
-    first_encounter = wa_id not in memories_store
-    memory = memories_store.get(wa_id, ConversationBufferWindowMemory(k=3))
+def generate_response(message):
+    global memories_store
+    
+    name = message.split(":")[0]
+
+    if name not in memories_store:
+        memories_store[name] = ConversationBufferWindowMemory(k=3)
+    memory = memories_store[name]
     chain.memory = memory
 
-    #generate a response
+    message_body = message.split(":")[1]
     message_body = add_medical_context(message_body)
     new_message = chain.run(message_body)
-    memories_store[wa_id] = chain.memory #Store or update the memory
+    memories_store[name] = chain.memory
 
-    new_message = f"Hey, {name}!" + new_message if first_encounter else new_message
+    new_message = f"Hey, {name}!" + new_message if name not in memories_store else new_message
 
     return new_message
+
+
+def main():
+    while True:
+        message = input("Enter your name and message: ")
+        response = generate_response(message)
+        print(response)
+        time.sleep(1)
+
+
+if __name__ == "__main__":
+    main()
+
