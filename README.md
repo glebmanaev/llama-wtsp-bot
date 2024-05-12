@@ -40,3 +40,9 @@ In separate terminal run ngrok:
 ```bash
 ngrok http 8000 --domain <your--ngrok-domain>.ngrok-free.app
 ```
+
+## Run just the chat model
+
+```bash
+python bare_bot.py
+```
